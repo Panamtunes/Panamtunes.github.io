@@ -4,18 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Panam Tunes - Gallery-Style Horizontal Slide</title>
+  
+  <!-- Your Google AdSense Auto Ads Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7207992493892636"
+     crossorigin="anonymous"></script>
+
   <style>
     body {
       margin: 0;
       padding: 0;
-      height: 400vh; /* Extra scroll space for testing */
+      height: 400vh;
       font-family: Arial, sans-serif;
       background: #000;
       overflow-x: hidden;
       position: relative;
     }
 
-    /* Intro Section (Panam Tunes) */
     .intro-section {
       height: 100vh;
       display: flex;
@@ -35,7 +39,6 @@
       transform: translateY(-50px);
     }
 
-    /* Phone Frame Section (Video) */
     .video-section {
       position: relative;
       display: flex;
@@ -63,7 +66,6 @@
       object-fit: cover;
     }
 
-    /* Final Text: "Music That Moves You – Your Way!" */
     .final-text {
       position: fixed;
       top: 50%;
@@ -79,30 +81,24 @@
       white-space: nowrap;
     }
 
-    /* Feature Slider Container */
-    /* Thoda chhota rakha hai (360px) taaki next image ka part dikh sake */
     .feature-slider-container {
       width: 360px;
-      margin: 40px auto; /* Center horizontally */
-      overflow: hidden;  /* Hide overflowing images */
+      margin: 40px auto;
+      overflow: hidden;
       position: relative;
     }
 
-    /* Horizontal Slider */
     .feature-slider {
       display: flex;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
-      /* Hide scrollbar */
-      scrollbar-width: none; /* Firefox */
+      scrollbar-width: none;
     }
     .feature-slider::-webkit-scrollbar {
-      display: none; /* Chrome, Safari, Opera */
+      display: none;
     }
 
-    /* Each Slide */
-    /* Thoda kam width (340px) + margin-right for spacing */
     .slide {
       flex: 0 0 auto;
       width: 340px;
@@ -115,14 +111,12 @@
       scroll-snap-align: center;
       background: #111;
     }
-    /* Full-Frame Image inside each slide */
     .slide img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    /* Text Below Slider */
     .slide-text-overlay {
       width: 360px;
       margin: 10px auto 0;
@@ -134,7 +128,6 @@
       pointer-events: none;
     }
 
-    /* Responsive for phones (adjust numbers as needed) */
     @media (max-width: 768px) {
       .intro-text {
         font-size: 3rem;
@@ -146,12 +139,11 @@
       .final-text {
         font-size: 1.2rem;
       }
-      /* Container & slide widths for phone */
       .feature-slider-container {
         width: 300px;
       }
       .slide {
-        width: 280px; /* 20px smaller so next image partial visible */
+        width: 280px;
         height: 640px;
         margin-right: 10px;
         border: 6px solid #fff;
@@ -166,12 +158,10 @@
   </style>
 </head>
 <body>
-  <!-- Intro Section -->
   <div class="intro-section" id="intro">
     <div class="intro-text" id="panamText">Panam Tunes</div>
   </div>
 
-  <!-- Phone Frame with Video -->
   <div class="video-section" id="videoSection">
     <div class="phone-frame" id="phoneFrame">
       <video autoplay loop muted playsinline>
@@ -181,12 +171,10 @@
     </div>
   </div>
 
-  <!-- Final Text -->
   <div class="final-text" id="finalText">
     Music That Moves You – Your Way!
   </div>
 
-  <!-- Horizontal Feature Slider (Gallery Style) -->
   <div class="feature-slider-container">
     <div class="feature-slider" id="featureSlider">
       <div class="slide"><img src="1.jpg" alt="Feature 1"></div>
@@ -201,13 +189,11 @@
       <div class="slide"><img src="10.jpg" alt="Feature 10"></div>
     </div>
   </div>
-  <!-- Text Overlay Now Below the Slider -->
   <div id="slideTextOverlay" class="slide-text-overlay">
     Welcome to Panam Tunes
   </div>
 
   <script>
-    // Original Scroll-based Animation
     const panamText = document.getElementById('panamText');
     const phoneFrame = document.getElementById('phoneFrame');
     const finalText = document.getElementById('finalText');
@@ -215,14 +201,12 @@
     window.addEventListener('scroll', () => {
       const scrollY = window.scrollY;
       
-      // "Panam Tunes" fades out after 150px
       if (scrollY > 150) {
         panamText.classList.add('fade-out');
       } else {
         panamText.classList.remove('fade-out');
       }
       
-      // Phone Frame: appears between 300px and 700px, then shrinks/fades out from 700px to 1300px
       if (scrollY > 300 && scrollY <= 700) {
         phoneFrame.style.opacity = 1;
         phoneFrame.style.transform = 'scale(1)';
@@ -240,7 +224,6 @@
         phoneFrame.style.transform = 'scale(0)';
       }
       
-      // Final Text: appears when phone frame disappears (>=1300px)
       if (scrollY >= 1300) {
         finalText.style.opacity = 1;
         if (scrollY < 1900) {
@@ -259,9 +242,7 @@
       }
     });
 
-    // New Feature: Horizontal slider text overlay functionality below the slider
     document.addEventListener("DOMContentLoaded", function() {
-      // Array holding the text for each slide (in the same order)
       const slideTexts = [
         "Crafted for You, Powered by Panam Tunes.",
         "Let music move you to sleep – your way, every night.",
@@ -282,7 +263,6 @@
 
       const slideTextOverlay = document.getElementById("slideTextOverlay");
 
-      // Intersection Observer to update the text when a slide is at least 50% visible
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
