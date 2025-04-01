@@ -155,6 +155,31 @@
         font-size: 1.2rem;
       }
     }
+
+    /* Updated CSS for the Download Button */
+    .download-btn-container {
+      text-align: center; /* Center the button */
+      margin: 20px auto; /* Add some spacing above and below */
+      z-index: 20;
+    }
+
+    .download-btn {
+      background-color: #f40909; /* Bright blue for visibility */
+      color: #fff; /* White text */
+      padding: 15px 30px; /* Larger padding for better click area */
+      border-radius: 50px; /* Pill shape */
+      font-size: 1.3rem; /* Larger font */
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.6); /* Prominent shadow */
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .download-btn:hover {
+      background-color: #f20707; /* Slightly darker blue on hover */
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
@@ -191,6 +216,11 @@
   </div>
   <div id="slideTextOverlay" class="slide-text-overlay">
     Welcome to Panam Tunes
+  </div>
+
+  <!-- Download Button HTML (Placed after the slide-text-overlay) -->
+  <div class="download-btn-container" id="downloadBtnContainer">
+    <a href="Panam Tunes 1.0.1.apk" download class="download-btn" id="downloadBtn">Download</a>
   </div>
 
   <script>
