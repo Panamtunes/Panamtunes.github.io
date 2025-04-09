@@ -128,6 +128,75 @@
       pointer-events: none;
     }
 
+    .global-icon {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background: #f40909; /* Red color for globe */
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 100;
+      box-shadow: 0 0 10px rgba(255,255,255,0.6);
+    }
+    .global-icon:hover {
+      background: #f20707; /* Slightly darker red on hover */
+    }
+
+    .popup, .tracker-popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 200;
+      justify-content: center;
+      align-items: center;
+    }
+    .popup-content, .tracker-popup-content {
+      background: rgba(0, 0, 0, 0.7); /* Black transparent background */
+      backdrop-filter: blur(10px); /* Blur effect */
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      width: 90%;
+      max-width: 300px; /* Smaller popup */
+      color: #fff; /* White text for readability */
+    }
+    .popup-content input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      background: rgba(255, 255, 255, 0.1); /* Slightly transparent input */
+      color: #fff; /* White text */
+    }
+    .popup-content input::placeholder {
+      color: #ccc; /* Light placeholder text */
+    }
+    .popup-content button, .tracker-popup-content button {
+      padding: 10px 20px;
+      background: #f40909;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .popup-content button:hover, .tracker-popup-content button:hover {
+      background: #f20707;
+    }
+    .download-tracker {
+      margin-top: 20px;
+      font-size: 1.2rem;
+    }
+
     @media (max-width: 768px) {
       .intro-text {
         font-size: 3rem;
@@ -154,30 +223,33 @@
         width: 300px;
         font-size: 1.2rem;
       }
+      .global-icon {
+        width: 40px;
+        height: 40px;
+      }
     }
 
-    /* Updated CSS for the Download Button */
     .download-btn-container {
-      text-align: center; /* Center the button */
-      margin: 20px auto; /* Add some spacing above and below */
+      text-align: center;
+      margin: 20px auto;
       z-index: 20;
     }
 
     .download-btn {
-      background-color: #f40909; /* Bright blue for visibility */
-      color: #fff; /* White text */
-      padding: 15px 30px; /* Larger padding for better click area */
-      border-radius: 50px; /* Pill shape */
-      font-size: 1.3rem; /* Larger font */
+      background-color: #f40909;
+      color: #fff;
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-size: 1.3rem;
       font-weight: bold;
       text-decoration: none;
       display: inline-block;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.6); /* Prominent shadow */
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
       transition: background-color 0.3s ease, transform 0.3s ease;
     }
 
     .download-btn:hover {
-      background-color: #f20707; /* Slightly darker blue on hover */
+      background-color: #f20707;
       transform: scale(1.05);
     }
   </style>
@@ -218,16 +290,49 @@
     Welcome to Panam Tunes
   </div>
 
-  <!-- Download Button HTML (Placed after the slide-text-overlay) -->
+  <!-- Download Button HTML -->
   <div class="download-btn-container" id="downloadBtnContainer">
-    <a href="Panam Tunes 1.0.1.apk" download class="download-btn" id="downloadBtn">Download</a>
+    <a href="Panam Tunes 2.0.0.apk" download class="download-btn" id="downloadBtn">Download</a>
+  </div>
+
+  <!-- Global Icon -->
+  <div class="global-icon" id="globalIcon">🌐</div>
+
+  <!-- Popup for Unique ID -->
+  <div class="popup" id="popup">
+    <div class="popup-content">
+      <h2>Enter Secret Unique ID</h2>
+      <input type="text" id="uniqueIdInput" placeholder="Enter your secret ID">
+      <button id="submitId">Submit</button>
+    </div>
+  </div>
+
+  <!-- New Popup for Live Tracker -->
+  <div class="tracker-popup" id="trackerPopup">
+    <div class="tracker-popup-content">
+      <h2>Live Download Tracker</h2>
+      <div class="download-tracker">Total Downloads: <span id="downloadCount">121</span></div>
+      <button id="closeTracker">Close</button>
+    </div>
   </div>
 
   <script>
     const panamText = document.getElementById('panamText');
     const phoneFrame = document.getElementById('phoneFrame');
     const finalText = document.getElementById('finalText');
-    
+    const globalIcon = document.getElementById('globalIcon');
+    const popup = document.getElementById('popup');
+    const trackerPopup = document.getElementById('trackerPopup');
+    const submitId = document.getElementById('submitId');
+    const uniqueIdInput = document.getElementById('uniqueIdInput');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const downloadCountSpan = document.getElementById('downloadCount');
+    const closeTracker = document.getElementById('closeTracker');
+
+    let downloadCount = 121; // Starting from 121
+    let isIdVerified = false;
+
+    // Scroll Effects
     window.addEventListener('scroll', () => {
       const scrollY = window.scrollY;
       
@@ -272,6 +377,7 @@
       }
     });
 
+    // Feature Slider Text
     document.addEventListener("DOMContentLoaded", function() {
       const slideTexts = [
         "Crafted for You, Powered by Panam Tunes.",
@@ -305,6 +411,60 @@
       });
 
       slides.forEach(slide => observer.observe(slide));
+    });
+
+    // Global Icon Click
+    globalIcon.addEventListener('click', () => {
+      popup.style.display = 'flex';
+      isIdVerified = false; // Reset verification on every icon click
+    });
+
+    // Submit Unique ID
+    submitId.addEventListener('click', () => {
+      const id = uniqueIdInput.value.trim();
+      const idPattern = /^mekuchnahi01\d{4}$/; // Fixed format: mekuchnahi01 + 4 digits
+      console.log("Entered ID:", id); // Debug
+
+      if (idPattern.test(id)) {
+        isIdVerified = true;
+        popup.style.display = 'none'; // Close ID popup
+        trackerPopup.style.display = 'flex'; // Open tracker popup
+        downloadCountSpan.innerText = downloadCount; // Show current count
+        console.log("ID Verified, tracker shown"); // Debug
+      } else {
+        alert("Invalid Secret ID! It must start with 'mekuchnahi01' followed by 4 digits.");
+        console.log("Invalid ID"); // Debug
+      }
+    });
+
+    // Download Button Click
+    downloadBtn.addEventListener('click', () => {
+      downloadCount++;
+      if (isIdVerified) {
+        downloadCountSpan.innerText = downloadCount; // Update count in tracker
+        console.log("Download count updated:", downloadCount); // Debug
+      }
+    });
+
+    // Close Tracker Popup and Reset Verification
+    closeTracker.addEventListener('click', () => {
+      trackerPopup.style.display = 'none';
+      isIdVerified = false; // Reset verification
+    });
+
+    // Close ID Popup on Outside Click
+    popup.addEventListener('click', (e) => {
+      if (e.target === popup) {
+        popup.style.display = 'none';
+      }
+    });
+
+    // Close Tracker Popup on Outside Click and Reset Verification
+    trackerPopup.addEventListener('click', (e) => {
+      if (e.target === trackerPopup) {
+        trackerPopup.style.display = 'none';
+        isIdVerified = false; // Reset verification
+      }
     });
   </script>
 </body>
